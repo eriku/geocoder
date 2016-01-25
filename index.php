@@ -60,6 +60,7 @@
 
   <!-- Custom App -->
   <script src="js/app.js"></script>
+  <script src="js/copytoclipboard.js"></script>
 </head>
 <body ng-app="app" ng-controller="appCtrl">
   <div class="jumbotron">
