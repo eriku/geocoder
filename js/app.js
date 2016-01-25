@@ -29,8 +29,8 @@ app.controller('appCtrl', function($scope) {
                             $scope.$apply(function(){
                                 $scope.addressResults = results[1];
                                 $scope.addressItems = results[1].address_components;
-                                $scope.addressLatLng.lat = results[1].geometry.location.lat();
-                                $scope.addressLatLng.lng = results[1].geometry.location.lng();
+                                $scope.addressLatLng.lat = results[1].geometry.location.lat().toString();
+                                $scope.addressLatLng.lng = results[1].geometry.location.lng().toString();
                             });
                             map.setCenter(latlng);
                             var marker = new google.maps.Marker({
@@ -51,8 +51,8 @@ app.controller('appCtrl', function($scope) {
                         $scope.$apply(function(){
                             $scope.addressResults = results[0];
                             $scope.addressItems = results[0].address_components;
-                            $scope.addressLatLng.lat = results[0].geometry.location.lat();
-                            $scope.addressLatLng.lng = results[0].geometry.location.lng();
+                            $scope.addressLatLng.lat = results[0].geometry.location.lat().toString();
+                            $scope.addressLatLng.lng = results[0].geometry.location.lng().toString();
                         });
                         var loc = results[0].geometry.location;
                         map.setCenter(loc);
