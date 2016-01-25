@@ -1,5 +1,5 @@
 <?php
-	$sPageUrl = 'http://erikuunila.com/geocoder/';
+  $sPageUrl = 'http://erikuunila.com/geocoder/';
   $sPageTitle = 'Google Geocoder | Erik Uunila';
   $sPageDesc = 'Get google maps information from an address. Including latitude &amp; longitude';
   $sPageKeywords = 'google map, google maps, latitude, longitude, geocode, address search';
