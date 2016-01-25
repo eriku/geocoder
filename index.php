@@ -55,8 +55,8 @@
   <script src="https://maps.google.com/maps/api/js?sensor=true"></script>
 
   <!-- AngularJS -->
-  <script src="https://code.angularjs.org/1.3.15/angular.js"></script>
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui/0.4.0/angular-ui.js"></script>
+  <script src="https://code.angularjs.org/1.3.15/angular.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui/0.4.0/angular-ui.min.js"></script>
 
   <!-- Custom App -->
   <script src="js/app.js"></script>
@@ -74,10 +74,9 @@
         <div class="form-group">
           <div class="input-group">
             <div class="input-group-addon"><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span></div>
-            <input type="text" placeholder="Address" class="form-control" id="search" name="search" autofocus ng-model="search"/>
+            <input type="text" placeholder="Address or lat,lng" class="form-control" id="search" name="search" autofocus ng-model="search"/>
             <div class="input-group-btn"><button id="submit" type="submit" class="btn btn-primary" ng-disabled="search.length == 0">Go</button></div>
           </div>
-          <p><small>eg: 1670 Keller Pkwy #130, Keller, TX 76248 OR 40.714224,-73.961452</small></p>
         </div>
       </form>
     </div>
@@ -86,7 +85,7 @@
     <div class="row">
       <div class="col-md-7 col-md-push-5">
         <!-- current location -->
-        <div class="text-info text-left table-responsive">
+        <div class="text-info text-left table-responsive" ng-show="searchItems">
           <table class="table table-striped table-hover small text-nowrap">
             <tr ng-repeat="item in searchItems">
               <th>{{item.types[0] | labeler}}</th>
