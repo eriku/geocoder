@@ -54,13 +54,14 @@
   <!-- <script src="https://maps.google.com/maps/api/js?key=AIzaSyD-9FWU82CZ3SzpxUNjsZ1Vh6XS5o55uiQ&amp;sensor=true"></script> -->
   <script src="https://maps.google.com/maps/api/js?sensor=true"></script>
 
-  <!-- AngularJS -->
-  <script src="https://code.angularjs.org/1.3.15/angular.min.js"></script>
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui/0.4.0/angular-ui.min.js"></script>
+  <!-- Zero Clipboard -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.1.6/ZeroClipboard.min.js"></script>
 
-  <!-- Custom App -->
-  <script src="js/app.js"></script>
-  <script src="js/copytoclipboard.js"></script>
+  <!-- AngularJS -->
+  <script src="https://code.angularjs.org/1.3.15/angular.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui/0.4.0/angular-ui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ng-clip/0.2.6/ng-clip.min.js"></script>
+
 </head>
 <body ng-app="app" ng-controller="appCtrl">
   <div class="jumbotron">
@@ -75,8 +76,8 @@
         <div class="form-group">
           <div class="input-group">
             <div class="input-group-addon"><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span></div>
-            <input type="text" placeholder="Address or lat,lng" class="form-control" id="search" name="search" autofocus ng-model="search"/>
-            <div class="input-group-btn"><button id="submit" type="submit" class="btn btn-primary" ng-disabled="search.length == 0">Go</button></div>
+            <input type="text" placeholder="Address or lat,lng" class="form-control" id="address" name="address" autofocus ng-model="address"/>
+            <div class="input-group-btn"><button id="submit" type="submit" class="btn btn-primary" ng-disabled="address.length == 0">Go</button></div>
           </div>
         </div>
       </form>
@@ -86,23 +87,27 @@
     <div class="row">
       <div class="col-md-7 col-md-push-5">
         <!-- current location -->
-        <div class="text-info text-left table-responsive" ng-show="searchItems">
+        <div class="text-info text-left table-responsive" ng-show="addressItems">
           <table class="table table-striped table-hover small text-nowrap">
-            <tr ng-repeat="item in searchItems">
+            <tr ng-repeat="item in addressItems">
               <th>{{item.types[0] | labeler}}</th>
               <td>{{item.short_name}}</td>
+              <td class="table_copy" clip-copy="item.short_name" title="click to copy"><span class="glyphicon glyphicon-copy"></span></td>
             </tr>
             <tr>
               <th>Latitude</th>
-              <td>{{searchResults.geometry.location.lat()}}</td>
+              <td>{{addressLatLng.lat}}</td>
+              <td class="table_copy" clip-copy="addressLatLng.lat" title="click to copy"><span class="glyphicon glyphicon-copy"></span></td>
             </tr>
             <tr>
               <th>Longitude</th>
-              <td>{{searchResults.geometry.location.lng()}}</td>
+              <td>{{addressLatLng.lng}}</td>
+              <td class="table_copy" clip-copy="addressLatLng.lng" title="click to copy"><span class="glyphicon glyphicon-copy"></span></td>
             </tr>
             <tr>
               <th>Place ID</th>
-              <td>{{searchResults.place_id}}</td>
+              <td>{{addressResults.place_id}}</td>
+              <td class="table_copy" clip-copy="addressResults.place_id" title="click to copy"><span class="glyphicon glyphicon-copy"></span></td>
             </tr>
           </table>
         </div>
@@ -135,5 +140,8 @@
   ga('send', 'pageview');
 
 </script>
+  <!-- Custom App -->
+  <script src="js/app.js"></script>
+  <!-- <script src="js/copytoclipboard.js"></script> -->
 </body>
 </html>

@@ -7,18 +7,19 @@ function ucwords(str,force){
 }
 
 // --- Start Angular Code ---
-var app = angular.module('app', ['ui.directives']);
+var app = angular.module('app', ['ui.directives', 'ngClipboard']);
 
 app.controller('appCtrl', function($scope) {
 
-    $scope.search;
-    $scope.searchResults;
-    $scope.searchItems;
+    $scope.address;
+    $scope.addressResults;
+    $scope.addressItems;
+    $scope.addressLatLng = [];
 
     $scope.geocode = function(geocoder, map, infowindow) {
-        if ($scope.search && $scope.search.length > 0) {
+        if ($scope.address && $scope.address.length > 0) {
             if (!this.geocoder) this.geocoder = new google.maps.Geocoder();
-            var latlngArray = $scope.search.split(',');
+            var latlngArray = $scope.address.split(',');
             // First check if search is lat/lng
             if (latlngArray.length === 2 && ($.isNumeric(latlngArray[0]) && $.isNumeric(latlngArray[1]))) {
                 var latlng = {lat: parseFloat(latlngArray[0]), lng: parseFloat(latlngArray[1])};
@@ -26,8 +27,10 @@ app.controller('appCtrl', function($scope) {
                     if (status === google.maps.GeocoderStatus.OK) {
                         if (results[1]) {
                             $scope.$apply(function(){
-                                $scope.searchResults = results[1];
-                                $scope.searchItems = results[1].address_components;
+                                $scope.addressResults = results[1];
+                                $scope.addressItems = results[1].address_components;
+                                $scope.addressLatLng.lat = results[1].geometry.location.lat();
+                                $scope.addressLatLng.lng = results[1].geometry.location.lng();
                             });
                             map.setCenter(latlng);
                             var marker = new google.maps.Marker({
@@ -43,11 +46,13 @@ app.controller('appCtrl', function($scope) {
                 });
             // Then assume that search is an Address
             } else {
-                this.geocoder.geocode({'address': $scope.search}, function(results, status) {
+                this.geocoder.geocode({'address': $scope.address}, function(results, status) {
                     if (status === google.maps.GeocoderStatus.OK) {
                         $scope.$apply(function(){
-                            $scope.searchResults = results[0];
-                            $scope.searchItems = results[0].address_components;
+                            $scope.addressResults = results[0];
+                            $scope.addressItems = results[0].address_components;
+                            $scope.addressLatLng.lat = results[0].geometry.location.lat();
+                            $scope.addressLatLng.lng = results[0].geometry.location.lng();
                         });
                         var loc = results[0].geometry.location;
                         map.setCenter(loc);
@@ -62,6 +67,18 @@ app.controller('appCtrl', function($scope) {
             }
             map.setZoom(16);
         }
+    };
+
+    $scope.getTextToCopy = function(copy) {
+      return copy;
+    };
+
+    $scope.fallback = function(copy) {
+      window.prompt('Press cmd+c to copy the text below.', copy);
+    };
+
+    $scope.showMessage = function() {
+      console.log('clip-click works!');
     };
 });
 
@@ -124,3 +141,7 @@ app.filter('labeler', function () {
       return ucwords(input);
   };
 });
+
+app.config(['ngClipProvider', function(ngClipProvider) {
+  ngClipProvider.setPath('//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.1.6/ZeroClipboard.swf');
+}]);
