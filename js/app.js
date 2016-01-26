@@ -1,3 +1,14 @@
+/*!
+ *
+ * Google Geocoder
+ * -----------------
+ *
+ * @TODO: Drag marker & update data table (commented out code for now)
+ * @TODO: Create shortened URL for google maps link using Public API
+ *        - https://developers.google.com/url-shortener/v1/getting_started
+ *
+ */
+
 function ucwords(str,force){
     str=force ? str.toLowerCase() : str;
     return str.replace(/(\b)([a-zA-Z])/g,
@@ -16,6 +27,7 @@ app.controller('appCtrl', function($scope) {
     $scope.addressResults;
     $scope.addressItems;
     $scope.addressLatLng = [];
+    $scope.addressLink;
 
     // $scope.geocodePosition = function(pos, geocoder, map, infowindow) {
     //     console.log(pos);
@@ -63,6 +75,8 @@ app.controller('appCtrl', function($scope) {
                                 $scope.addressItems = results[1].address_components;
                                 $scope.addressLatLng.lat = results[1].geometry.location.lat().toString();
                                 $scope.addressLatLng.lng = results[1].geometry.location.lng().toString();
+                                $scope.addressLink = 'http://maps.google.com/maps?z=12&q=' + results[1].formatted_address;
+                                $scope.addressLink = $scope.addressLink.replace(/ /g,'+');
                             });
                             map.setCenter(latlng);
                             var marker = new google.maps.Marker({
@@ -85,10 +99,13 @@ app.controller('appCtrl', function($scope) {
                 this.geocoder.geocode({'address': $scope.address}, function(results, status) {
                     if (status === google.maps.GeocoderStatus.OK) {
                         $scope.$apply(function(){
+                            console.log(results[0]);
                             $scope.addressResults = results[0];
                             $scope.addressItems = results[0].address_components;
                             $scope.addressLatLng.lat = results[0].geometry.location.lat().toString();
                             $scope.addressLatLng.lng = results[0].geometry.location.lng().toString();
+                            $scope.addressLink = 'http://maps.google.com/maps?z=12&q=' + results[0].formatted_address;
+                            $scope.addressLink = $scope.addressLink.replace(/ /g,'+');
                         });
                         var loc = results[0].geometry.location;
                         map.setCenter(loc);
