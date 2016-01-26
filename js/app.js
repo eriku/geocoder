@@ -75,8 +75,7 @@ app.controller('appCtrl', function($scope) {
                                 $scope.addressItems = results[1].address_components;
                                 $scope.addressLatLng.lat = results[1].geometry.location.lat().toString();
                                 $scope.addressLatLng.lng = results[1].geometry.location.lng().toString();
-                                $scope.addressLink = 'http://maps.google.com/maps?z=12&q=' + results[1].formatted_address;
-                                $scope.addressLink = $scope.addressLink.replace(/ /g,'+');
+                                $scope.addressLink = 'http://maps.google.com/maps?z=12&q=' + $scope.addressLatLng.lat + '+' + $scope.addressLatLng.lng;
                             });
                             map.setCenter(latlng);
                             var marker = new google.maps.Marker({
@@ -134,7 +133,6 @@ app.controller('appCtrl', function($scope) {
     };
 
     $scope.flashClass = function(event) {
-        console.log($(event.currentTarget));
         $(event.currentTarget).addClass('success').delay(1000).queue(function(){
             $(this).removeClass('success').dequeue();
         });
