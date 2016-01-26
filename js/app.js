@@ -99,7 +99,6 @@ app.controller('appCtrl', function($scope) {
                 this.geocoder.geocode({'address': $scope.address}, function(results, status) {
                     if (status === google.maps.GeocoderStatus.OK) {
                         $scope.$apply(function(){
-                            console.log(results[0]);
                             $scope.addressResults = results[0];
                             $scope.addressItems = results[0].address_components;
                             $scope.addressLatLng.lat = results[0].geometry.location.lat().toString();
