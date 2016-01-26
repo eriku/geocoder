@@ -7,8 +7,8 @@
 
   <title>Google Geocoder | Erik Uunila</title>
 
-  <meta content="/favicon.png" itemprop="image">
-  <link href="/favicon.ico" rel="shortcut icon">
+  <meta content="favicon.png" itemprop="image">
+  <link href="favicon.ico" rel="shortcut icon">
 
   <meta name="description" content="Get google maps information from an address. Including latitude &amp; longitude" />
   <meta name="keywords" content="google map, google maps, latitude, longitude, geocode, address search" />
@@ -60,7 +60,7 @@
   <div class="jumbotron">
     <div class="container">
       <h1>Google Geocoder</h1>
-      <p>Enter an address, see it on the map and get the latitude &amp; longitude.</p>
+      <p>Enter an address or latitude &amp; longitude and see the google results.</p>
     </div>
   </div>
   <div class="container">
@@ -80,28 +80,37 @@
     <div class="row">
       <div class="col-md-7 col-md-push-5">
         <!-- current location -->
-        <div class="text-info text-left table-responsive" ng-show="addressItems">
+        <div class="text-info text-left table-responsive">
           <table class="table table-striped table-hover small text-nowrap">
-            <tr ng-repeat="item in addressItems" clip-copy="item.short_name" title="click to copy">
-              <th class="table_label">{{item.types[0] | labeler}}</th>
-              <td class="table_content">{{item.short_name}}</td>
-              <td class="table_copy"><span class="glyphicon glyphicon-copy"></span></td>
-            </tr>
-            <tr clip-copy="addressLatLng.lat" title="click to copy">
-              <th class="table_label">Latitude</th>
-              <td class="table_content">{{addressLatLng.lat}}</td>
-              <td class="table_copy"><span class="glyphicon glyphicon-copy"></span></td>
-            </tr>
-            <tr clip-copy="addressLatLng.lng" title="click to copy">
-              <th class="table_label">Longitude</th>
-              <td class="table_content">{{addressLatLng.lng}}</td>
-              <td class="table_copy"><span class="glyphicon glyphicon-copy"></span></td>
-            </tr>
-            <tr clip-copy="addressResults.place_id" title="click to copy">
-              <th class="table_label">Place ID</th>
-              <td class="table_content">{{addressResults.place_id}}</td>
-              <td class="table_copy"><span class="glyphicon glyphicon-copy"></span></td>
-            </tr>
+            <thead>
+              <tr>
+                <th>Label</th>
+                <th>Info</th>
+                <th>Copy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="item in addressItems" ng-show="addressItems">
+                <th class="table_label">{{item.types[0] | labeler}}</th>
+                <td class="table_content">{{item.short_name}}</td>
+                <td class="table_copy"><button class="btn btn-primary btn-xs" title="click to copy" clip-copy="item.short_name" ng-click="flashClass($event)"><i class="glyphicon glyphicon-copy"></i></button></td>
+              </tr>
+              <tr ng-show="addressResults">
+                <th class="table_label">Latitude</th>
+                <td class="table_content">{{addressLatLng.lat}}</td>
+                <td class="table_copy"><button class="btn btn-primary btn-xs" clip-copy="addressLatLng.lat" ng-click="flashClass($event)" title="click to copy"><i class="glyphicon glyphicon-copy"></i></button></td>
+              </tr>
+              <tr ng-show="addressResults">
+                <th class="table_label">Longitude</th>
+                <td class="table_content">{{addressLatLng.lng}}</td>
+                <td class="table_copy"><button class="btn btn-primary btn-xs" clip-copy="addressLatLng.lng" title="click to copy" ng-click="flashClass($event)"><i class="glyphicon glyphicon-copy"></i></button></td>
+              </tr>
+              <tr ng-show="addressResults">
+                <th class="table_label">Place ID</th>
+                <td class="table_content">{{addressResults.place_id}}</td>
+                <td class="table_copy"><button class="btn btn-primary btn-xs" clip-copy="addressResults.place_id" title="click to copy" ng-click="flashClass($event)"><i class="glyphicon glyphicon-copy"></i></button></td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </div>

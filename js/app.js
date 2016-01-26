@@ -11,10 +11,42 @@ var app = angular.module('app', ['ui.directives', 'ngClipboard']);
 
 app.controller('appCtrl', function($scope) {
 
+    $scope.toggle = false;
     $scope.address;
     $scope.addressResults;
     $scope.addressItems;
     $scope.addressLatLng = [];
+
+    // $scope.geocodePosition = function(pos, geocoder, map, infowindow) {
+    //     console.log(pos);
+    //     var latlng = {lat: parseFloat(pos.lat()), lng: parseFloat(pos.lng())};
+    //     geocoder.geocode({'location': latlng}, function(results, status) {
+    //         if (status === google.maps.GeocoderStatus.OK) {
+    //             if (results[1]) {
+    //                 console.log(results[1]);
+    //                 $scope.$apply(function(){
+    //                     $scope.addressResults = results[1];
+    //                     $scope.addressItems = results[1].address_components;
+    //                     $scope.addressLatLng.lat = results[1].geometry.location.lat().toString();
+    //                     $scope.addressLatLng.lng = results[1].geometry.location.lng().toString();
+    //                 });
+    //                 map.setCenter(latlng);
+    //             } else if (results[0]) {
+    //                 $scope.$apply(function(){
+    //                     $scope.addressResults = results[0];
+    //                     $scope.addressItems = results[0].address_components;
+    //                     $scope.addressLatLng.lat = results[0].geometry.location.lat().toString();
+    //                     $scope.addressLatLng.lng = results[0].geometry.location.lng().toString();
+    //                 });
+    //                 map.setCenter(latlng);
+    //             } else {
+    //                 window.alert('No results found');
+    //             }
+    //         } else {
+    //             window.alert('Geocoder failed due to: ' + status);
+    //         }
+    //     });
+    // };
 
     $scope.geocode = function(geocoder, map, infowindow) {
         if ($scope.address && $scope.address.length > 0) {
@@ -35,8 +67,12 @@ app.controller('appCtrl', function($scope) {
                             map.setCenter(latlng);
                             var marker = new google.maps.Marker({
                                 position: latlng,
+                                // draggable: true,
                                 map: map
                             });
+                            // google.maps.event.addListener(marker, 'dragend', function() {
+                            //     $scope.geocodePosition(marker.getPosition(), geocoder, map, infowindow);
+                            // });
                         } else {
                             window.alert('No results found');
                         }
@@ -58,8 +94,12 @@ app.controller('appCtrl', function($scope) {
                         map.setCenter(loc);
                         var marker = new google.maps.Marker({
                             map: map,
+                            // draggable: true,
                             position: loc
                         });
+                        // google.maps.event.addListener(marker, 'dragend', function() {
+                        //     $scope.geocodePosition(marker.getPosition(), geocoder, map, infowindow);
+                        // });
                     } else {
                         alert('Geocoder failed due to: ' + status);
                     }
@@ -77,8 +117,11 @@ app.controller('appCtrl', function($scope) {
       window.prompt('Press cmd+c to copy the text below.', copy);
     };
 
-    $scope.showMessage = function() {
-      console.log('clip-click works!');
+    $scope.flashClass = function(event) {
+        console.log($(event.currentTarget));
+        $(event.currentTarget).addClass('success').delay(1000).queue(function(){
+            $(this).removeClass('success').dequeue();
+        });
     };
 });
 
@@ -98,6 +141,9 @@ app.directive('appMap', function () {
             var geocoder = new google.maps.Geocoder();
             var infowindow = new google.maps.InfoWindow;
             var marker;
+            // google.maps.event.addListener(marker, 'dragend', function() {
+            //   scope.geocodePosition(marker.getPosition(), geocoder, map, infowindow);
+            // });
             document.getElementById('searchForm').addEventListener('submit', function() {
                 scope.geocode(geocoder, map, infowindow, marker);
             });
