@@ -20,7 +20,7 @@ function ucwords(str,force){
 // --- Start Angular Code ---
 var app = angular.module('app', ['ui.directives', 'ngClipboard']);
 
-app.controller('appCtrl', function($scope) {
+app.controller('appCtrl', function($scope, $http) {
 
     $scope.toggle = false;
     $scope.address;
@@ -29,40 +29,60 @@ app.controller('appCtrl', function($scope) {
     $scope.addressLatLng = [];
     $scope.addressLink;
 
-    // $scope.geocodePosition = function(pos, geocoder, map, infowindow) {
-    //     console.log(pos);
-    //     var latlng = {lat: parseFloat(pos.lat()), lng: parseFloat(pos.lng())};
-    //     geocoder.geocode({'location': latlng}, function(results, status) {
-    //         if (status === google.maps.GeocoderStatus.OK) {
-    //             if (results[1]) {
-    //                 console.log(results[1]);
-    //                 $scope.$apply(function(){
-    //                     $scope.addressResults = results[1];
-    //                     $scope.addressItems = results[1].address_components;
-    //                     $scope.addressLatLng.lat = results[1].geometry.location.lat().toString();
-    //                     $scope.addressLatLng.lng = results[1].geometry.location.lng().toString();
-    //                 });
-    //                 map.setCenter(latlng);
-    //             } else if (results[0]) {
-    //                 $scope.$apply(function(){
-    //                     $scope.addressResults = results[0];
-    //                     $scope.addressItems = results[0].address_components;
-    //                     $scope.addressLatLng.lat = results[0].geometry.location.lat().toString();
-    //                     $scope.addressLatLng.lng = results[0].geometry.location.lng().toString();
-    //                 });
-    //                 map.setCenter(latlng);
-    //             } else {
-    //                 window.alert('No results found');
-    //             }
-    //         } else {
-    //             window.alert('Geocoder failed due to: ' + status);
-    //         }
-    //     });
-    // };
+    // Create Short URL using Google URL Shortener API
+    $scope.createUrl = function(url) {
+        var googleAPIKey = 'AIzaSyD-9FWU82CZ3SzpxUNjsZ1Vh6XS5o55uiQ';
+        var googleShortenerUrl = 'https://www.googleapis.com/urlshortener/v1/url/?key=' + googleAPIKey;
+        $http
+            .post(googleShortenerUrl, {longUrl: url})
+            .success(function (resp){
+              $scope.shortUrl = resp.id;
+            });
+    };
 
-    $scope.geocode = function(geocoder, map, infowindow) {
+    $scope.geocodePosition = function(position, geocoder, map) {
+        var gResults = '';
+        var latlng = {lat: parseFloat(position.lat()), lng: parseFloat(position.lng())};
+        geocoder.geocode({'location': latlng}, function(results, status) {
+            if (status === google.maps.GeocoderStatus.OK) {
+                if (results[1]) {
+                    gResults = results[1];
+                    $scope.$apply(function(){
+                        $scope.applyData(results[1]);
+                    });
+                    map.setCenter(latlng);
+                    $scope.createUrl($scope.addressLink);
+                } else if (results[0]) {
+                    gResults = results[0];
+                    $scope.$apply(function(){
+                        $scope.applyData(results[0]);
+                    });
+                    map.setCenter(latlng);
+                    $scope.createUrl($scope.addressLink);
+                } else {
+                    window.alert('No results found');
+                }
+                if (gResults.length) {
+                  console.log(gResults);
+                }
+            } else {
+                window.alert('Geocoder failed due to: ' + status);
+            }
+        });
+    };
+
+    $scope.applyData = function(results) {
+        $scope.addressResults = results;
+        $scope.addressItems = results.address_components;
+        $scope.addressLatLng.lat = results.geometry.location.lat().toString();
+        $scope.addressLatLng.lng = results.geometry.location.lng().toString();
+        $scope.addressLink = 'http://maps.google.com/maps?z=12&q=' + results.formatted_address;
+        $scope.addressLink = $scope.addressLink.replace(/ /g,'+');
+    };
+
+    $scope.geocode = function(geocoder, map, marker, markers) {
         if ($scope.address && $scope.address.length > 0) {
-            if (!this.geocoder) this.geocoder = new google.maps.Geocoder();
+            if (!this.geocoder) { this.geocoder = new google.maps.Geocoder(); }
             var latlngArray = $scope.address.split(',');
             // First check if search is lat/lng
             if (latlngArray.length === 2 && ($.isNumeric(latlngArray[0]) && $.isNumeric(latlngArray[1]))) {
@@ -71,21 +91,19 @@ app.controller('appCtrl', function($scope) {
                     if (status === google.maps.GeocoderStatus.OK) {
                         if (results[1]) {
                             $scope.$apply(function(){
-                                $scope.addressResults = results[1];
-                                $scope.addressItems = results[1].address_components;
-                                $scope.addressLatLng.lat = results[1].geometry.location.lat().toString();
-                                $scope.addressLatLng.lng = results[1].geometry.location.lng().toString();
-                                $scope.addressLink = 'http://maps.google.com/maps?z=12&q=' + $scope.addressLatLng.lat + '+' + $scope.addressLatLng.lng;
+                                $scope.applyData(results[1]);
                             });
                             map.setCenter(latlng);
+                            $scope.createUrl($scope.addressLink);
                             var marker = new google.maps.Marker({
                                 position: latlng,
-                                // draggable: true,
+                                draggable: true,
                                 map: map
                             });
-                            // google.maps.event.addListener(marker, 'dragend', function() {
-                            //     $scope.geocodePosition(marker.getPosition(), geocoder, map, infowindow);
-                            // });
+                            markers.push(marker);
+                            google.maps.event.addListener(marker, 'dragend', function() {
+                                $scope.geocodePosition(marker.getPosition(), geocoder, map);
+                            });
                         } else {
                             window.alert('No results found');
                         }
@@ -98,23 +116,20 @@ app.controller('appCtrl', function($scope) {
                 this.geocoder.geocode({'address': $scope.address}, function(results, status) {
                     if (status === google.maps.GeocoderStatus.OK) {
                         $scope.$apply(function(){
-                            $scope.addressResults = results[0];
-                            $scope.addressItems = results[0].address_components;
-                            $scope.addressLatLng.lat = results[0].geometry.location.lat().toString();
-                            $scope.addressLatLng.lng = results[0].geometry.location.lng().toString();
-                            $scope.addressLink = 'http://maps.google.com/maps?z=12&q=' + results[0].formatted_address;
-                            $scope.addressLink = $scope.addressLink.replace(/ /g,'+');
+                            $scope.applyData(results[0]);
                         });
                         var loc = results[0].geometry.location;
                         map.setCenter(loc);
+                        $scope.createUrl($scope.addressLink);
                         var marker = new google.maps.Marker({
                             map: map,
-                            // draggable: true,
+                            draggable: true,
                             position: loc
                         });
-                        // google.maps.event.addListener(marker, 'dragend', function() {
-                        //     $scope.geocodePosition(marker.getPosition(), geocoder, map, infowindow);
-                        // });
+                        markers.push(marker);
+                        google.maps.event.addListener(marker, 'dragend', function() {
+                            $scope.geocodePosition(marker.getPosition(), geocoder, map);
+                        });
                     } else {
                         alert('Geocoder failed due to: ' + status);
                     }
@@ -141,11 +156,19 @@ app.controller('appCtrl', function($scope) {
 
 // - Documentation: https://developers.google.com/maps/documentation/
 app.directive('appMap', function () {
+    var markers = [];
+    function clearOverlays() {
+        for (var i = 0; i < markers.length; i++ ) {
+            markers[i].setMap(null);
+        }
+        markers.length = 0;
+    }
     return {
         restrict: 'E',
         template: '<div></div>',
         replace: true,
         link: function (scope, element, attrs) {
+            var marker;
             var myLatlng = new google.maps.LatLng(37.09024, -95.712891);
             var mapOptions = {
                 center: myLatlng,
@@ -153,13 +176,10 @@ app.directive('appMap', function () {
             };
             var map = new google.maps.Map(document.getElementById(attrs.id), mapOptions);
             var geocoder = new google.maps.Geocoder();
-            var infowindow = new google.maps.InfoWindow;
-            var marker;
-            // google.maps.event.addListener(marker, 'dragend', function() {
-            //   scope.geocodePosition(marker.getPosition(), geocoder, map, infowindow);
-            // });
+            // var infowindow = new google.maps.InfoWindow;
             document.getElementById('searchForm').addEventListener('submit', function() {
-                scope.geocode(geocoder, map, infowindow, marker);
+                clearOverlays();
+                scope.geocode(geocoder, map, marker, markers);
             });
         }
     };
@@ -205,3 +225,12 @@ app.filter('labeler', function () {
 app.config(['ngClipProvider', function(ngClipProvider) {
   ngClipProvider.setPath('//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.1.6/ZeroClipboard.swf');
 }]);
+
+// formats latitude or longitude to 6 decimal places
+app.filter('latlng', function () {
+    return function (input) {
+        input = input * 1;
+        input = input.toFixed(6);
+        return input;
+    };
+});

@@ -45,7 +45,8 @@
 
   <!-- Google Maps -->
   <!-- <script src="https://maps.google.com/maps/api/js?key=AIzaSyD-9FWU82CZ3SzpxUNjsZ1Vh6XS5o55uiQ&amp;sensor=true"></script> -->
-  <script src="https://maps.google.com/maps/api/js?sensor=true"></script>
+  <script src="https://maps.google.com/maps/api/js"></script>
+  <script src="https://apis.google.com/js/client.js"></script>
 
   <!-- Zero Clipboard -->
   <script src="//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.1.6/ZeroClipboard.min.js"></script>
@@ -105,15 +106,15 @@
                 <td class="table_content">{{addressLatLng.lng}}</td>
                 <td class="table_copy"><button class="btn btn-primary btn-xs" clip-copy="addressLatLng.lng" title="click to copy" ng-click="flashClass($event)"><i class="glyphicon glyphicon-copy"></i></button></td>
               </tr>
-              <tr ng-show="addressResults">
+              <!-- <tr ng-show="addressResults">
                 <th class="table_label">Place ID</th>
                 <td class="table_content">{{addressResults.place_id}}</td>
                 <td class="table_copy"><button class="btn btn-primary btn-xs" clip-copy="addressResults.place_id" title="click to copy" ng-click="flashClass($event)"><i class="glyphicon glyphicon-copy"></i></button></td>
-              </tr>
-            <tr ng-show="addressLink">
+              </tr> -->
+            <tr ng-show="shortUrl">
               <th>Link</th>
-              <td>{{addressLink}}</td>
-              <td class="table_copy"><button class="btn btn-primary btn-xs" clip-copy="addressLink" title="click to copy" ng-click="flashClass($event)"><i class="glyphicon glyphicon-copy"></i></
+              <td>{{shortUrl}}</td>
+              <td class="table_copy"><button class="btn btn-primary btn-xs" clip-copy="shortUrl" title="click to copy" ng-click="flashClass($event)"><i class="glyphicon glyphicon-copy"></i></
             </tr>
             </tbody>
           </table>
