@@ -111,10 +111,10 @@
                 <td class="table_content">{{addressResults.place_id}}</td>
                 <td class="table_copy"><button class="btn btn-primary btn-xs" clip-copy="addressResults.place_id" title="click to copy" ng-click="flashClass($event)"><i class="glyphicon glyphicon-copy"></i></button></td>
               </tr> -->
-            <tr ng-show="shortUrl">
+            <tr ng-show="addressLink">
               <th>Link</th>
-              <td>{{shortUrl}}</td>
-              <td class="table_copy"><button class="btn btn-primary btn-xs" clip-copy="shortUrl" title="click to copy" ng-click="flashClass($event)"><i class="glyphicon glyphicon-copy"></i></
+              <td>{{shortUrl | cif: shortUrl : addressLink}}</td>
+              <td class="table_copy"><button class="btn btn-primary btn-xs" clip-copy="shortUrl | cif: shortUrl : addressLink" title="click to copy" ng-click="flashClass($event)"><i class="glyphicon glyphicon-copy"></i></
             </tr>
             </tbody>
           </table>
