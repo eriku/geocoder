@@ -113,8 +113,8 @@
               </tr> -->
             <tr ng-show="addressLink">
               <th>Link</th>
-              <td>{{shortUrl | cif: shortUrl : addressLink}}</td>
-              <td class="table_copy"><button class="btn btn-primary btn-xs" clip-copy="shortUrl | cif: shortUrl : addressLink" title="click to copy" ng-click="flashClass($event)"><i class="glyphicon glyphicon-copy"></i></
+              <td>{{shortUrl ? shortUrl : addressLink}}</td>
+              <td class="table_copy"><button class="btn btn-primary btn-xs" clip-copy="shortUrl ? shortUrl : addressLink" title="click to copy" ng-click="flashClass($event)"><i class="glyphicon glyphicon-copy"></i></
             </tr>
             </tbody>
           </table>
