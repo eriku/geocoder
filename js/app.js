@@ -31,7 +31,8 @@ app.controller('appCtrl', function($scope, $http) {
 
     // Create Short URL using Google URL Shortener API
     $scope.createUrl = function(url) {
-        var googleAPIKey = 'AIzaSyD-9FWU82CZ3SzpxUNjsZ1Vh6XS5o55uiQ';
+        // var googleAPIKey = 'AIzaSyD-9FWU82CZ3SzpxUNjsZ1Vh6XS5o55uiQ';
+        var googleAPIKey = 'AIzaSyDd6a4GKpiPKTH3AiODafvy7nrjXwgO-oM';
         var googleShortenerUrl = 'https://www.googleapis.com/urlshortener/v1/url?key=' + googleAPIKey;
         $http
             .post(googleShortenerUrl, {longUrl: url})
