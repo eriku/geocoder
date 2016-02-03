@@ -36,8 +36,10 @@ app.controller('appCtrl', function($scope, $http) {
         var googleShortenerUrl = 'https://www.googleapis.com/urlshortener/v1/url?key=' + googleAPIKey;
         $http
             .post(googleShortenerUrl, {longUrl: url})
-            .then(function successCallback(resp){
-              $scope.shortUrl = resp.data.id;
+            .then(function successCallback(response){
+                $scope.shortUrl = response.data.id;
+            }, function errorCallback(response) {
+                console.log(response);
             });
     };
 
