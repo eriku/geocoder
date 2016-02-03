@@ -50,7 +50,7 @@
 
   <!-- Zero Clipboard -->
   <script src="//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.1.6/ZeroClipboard.min.js"></script>
-  
+
   <!-- Input Placeholder : For browsers that just aren't trying hard enough -->
   <script src="js/jquery.placeholder.min.js"></script>
 
@@ -115,7 +115,7 @@
             <tr ng-show="addressLink">
               <th>Link</th>
               <td>{{shortUrl ? shortUrl : addressLink}}</td>
-              <td class="table_copy"><button class="btn btn-primary btn-xs" clip-copy="shortUrl ? shortUrl : addressLink" title="click to copy" ng-click="flashClass($event)"><i class="glyphicon glyphicon-copy"></i></
+              <td class="table_copy"><button class="btn btn-primary btn-xs" clip-copy="shortUrl ? shortUrl : addressLink" title="click to copy" ng-click="flashClass($event)"><i class="glyphicon glyphicon-copy"></i></button></td>
             </tr>
             </tbody>
           </table>

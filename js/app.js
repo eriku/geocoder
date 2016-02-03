@@ -28,16 +28,16 @@ app.controller('appCtrl', function($scope, $http) {
     $scope.addressItems;
     $scope.addressLatLng = [];
     $scope.addressLink;
+    $scope.shortUrl;
 
     // Create Short URL using Google URL Shortener API
     $scope.createUrl = function(url) {
-        // var googleAPIKey = 'AIzaSyD-9FWU82CZ3SzpxUNjsZ1Vh6XS5o55uiQ';
-        var googleAPIKey = 'AIzaSyDd6a4GKpiPKTH3AiODafvy7nrjXwgO-oM';
+        var googleAPIKey = 'AIzaSyD-9FWU82CZ3SzpxUNjsZ1Vh6XS5o55uiQ';
         var googleShortenerUrl = 'https://www.googleapis.com/urlshortener/v1/url?key=' + googleAPIKey;
         $http
             .post(googleShortenerUrl, {longUrl: url})
-            .success(function (resp){
-              $scope.shortUrl = resp.id;
+            .then(function successCallback(resp){
+              $scope.shortUrl = resp.data.id;
             });
     };
 
@@ -98,13 +98,13 @@ app.controller('appCtrl', function($scope, $http) {
                             $scope.createUrl($scope.addressLink);
                             var marker = new google.maps.Marker({
                                 position: latlng,
-                                draggable: true,
+                                // draggable: true,
                                 map: map
                             });
                             markers.push(marker);
-                            google.maps.event.addListener(marker, 'dragend', function() {
-                                $scope.geocodePosition(marker.getPosition(), geocoder, map);
-                            });
+                            // google.maps.event.addListener(marker, 'dragend', function() {
+                            //     $scope.geocodePosition(marker.getPosition(), geocoder, map);
+                            // });
                         } else {
                             window.alert('No results found');
                         }
@@ -124,13 +124,13 @@ app.controller('appCtrl', function($scope, $http) {
                         $scope.createUrl($scope.addressLink);
                         var marker = new google.maps.Marker({
                             map: map,
-                            draggable: true,
+                            // draggable: true,
                             position: loc
                         });
                         markers.push(marker);
-                        google.maps.event.addListener(marker, 'dragend', function() {
-                            $scope.geocodePosition(marker.getPosition(), geocoder, map);
-                        });
+                        // google.maps.event.addListener(marker, 'dragend', function() {
+                        //     $scope.geocodePosition(marker.getPosition(), geocoder, map);
+                        // });
                     } else {
                         alert('Geocoder failed due to: ' + status);
                     }
@@ -223,21 +223,6 @@ app.filter('labeler', function () {
   };
 });
 
-app.filter('cif', function () {
-   return function(input, trueValue, falseValue) {
-        return input ? trueValue : falseValue;
-   };
-});
-
 app.config(['ngClipProvider', function(ngClipProvider) {
   ngClipProvider.setPath('//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.1.6/ZeroClipboard.swf');
 }]);
-
-// formats latitude or longitude to 6 decimal places
-app.filter('latlng', function () {
-    return function (input) {
-        input = input * 1;
-        input = input.toFixed(6);
-        return input;
-    };
-});
