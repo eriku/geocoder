@@ -48,6 +48,9 @@
   <script src="//maps.google.com/maps/api/js"></script>
   <script src="//apis.google.com/js/client.js"></script>
 
+  <!-- Cipboard.js -->
+  <script src="https://cdn.rawgit.com/zenorocha/clipboard.js/master/dist/clipboard.min.js"></script>
+
   <!-- Zero Clipboard -->
   <script src="//cdn.jsdelivr.net/zeroclipboard/2.2.0/ZeroClipboard.min.js"></script>
 
@@ -57,6 +60,7 @@
   <!-- AngularJS -->
   <script src="//code.angularjs.org/1.3.15/angular.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui/0.4.0/angular-ui.min.js"></script>
+  <script src="/js/ngclipboard.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/ng-clip/0.2.6/ng-clip.min.js"></script>
 
 </head>
@@ -95,27 +99,53 @@
               <tr ng-repeat="item in addressItems" ng-show="addressItems">
                 <th class="table_label">{{item.types[0] | labeler}}</th>
                 <td class="table_content">{{item.short_name}}</td>
-                <td class="table_copy"><button class="btn btn-primary btn-xs" title="click to copy" clip-copy="item.short_name" ng-click="flashClass($event)"><i class="glyphicon glyphicon-copy"></i></button></td>
+                <td class="table_copy">
+                  <button class="btn btn-primary btn-xs" title="click to copy"
+                    ngclipboard
+                    data-clipboard-text="{{item.short_name}}">
+                    <i class="glyphicon glyphicon-copy"></i>
+                  </button>
+                </td>
               </tr>
               <tr ng-show="addressResults">
                 <th class="table_label">Latitude</th>
                 <td class="table_content">{{addressLatLng.lat}}</td>
-                <td class="table_copy"><button class="btn btn-primary btn-xs" clip-copy="addressLatLng.lat" ng-click="flashClass($event)" title="click to copy"><i class="glyphicon glyphicon-copy"></i></button></td>
+                <td class="table_copy">
+                  <button class="btn btn-primary btn-xs" title="click to copy"
+                    ngclipboard
+                    data-clipboard-text="{{addressLatLng.lat}}">
+                    <i class="glyphicon glyphicon-copy"></i>
+                  </button></td>
               </tr>
               <tr ng-show="addressResults">
                 <th class="table_label">Longitude</th>
                 <td class="table_content">{{addressLatLng.lng}}</td>
-                <td class="table_copy"><button class="btn btn-primary btn-xs" clip-copy="addressLatLng.lng" title="click to copy" ng-click="flashClass($event)"><i class="glyphicon glyphicon-copy"></i></button></td>
+                <td class="table_copy">
+                  <button class="btn btn-primary btn-xs"
+                    ngclipboard
+                    data-clipboard-text="{{addressLatLng.lng}}" title="click to copy">
+                    <i class="glyphicon glyphicon-copy"></i>
+                  </button></td>
               </tr>
-              <!-- <tr ng-show="addressResults">
+              <tr ng-show="addressResults">
                 <th class="table_label">Place ID</th>
                 <td class="table_content">{{addressResults.place_id}}</td>
-                <td class="table_copy"><button class="btn btn-primary btn-xs" clip-copy="addressResults.place_id" title="click to copy" ng-click="flashClass($event)"><i class="glyphicon glyphicon-copy"></i></button></td>
-              </tr> -->
+                <td class="table_copy">
+                  <button class="btn btn-primary btn-xs" title="click to copy"
+                    ngclipboard
+                    data-clipboard-text="{{addressResults.place_id}}">
+                    <i class="glyphicon glyphicon-copy"></i>
+                  </button></td>
+              </tr>
             <tr ng-show="addressLink">
               <th>Link</th>
               <td>{{shortUrl ? shortUrl : addressLink}}</td>
-              <td class="table_copy"><button class="btn btn-primary btn-xs" clip-copy="shortUrl ? shortUrl : addressLink" title="click to copy" ng-click="flashClass($event)"><i class="glyphicon glyphicon-copy"></i></button></td>
+              <td class="table_copy">
+                <button class="btn btn-primary btn-xs" title="click to copy"
+                  ngclipboard
+                  data-clipboard-text="{{shortUrl ? shortUrl : addressLink}}">
+                  <i class="glyphicon glyphicon-copy"></i>
+                </button></td>
             </tr>
             </tbody>
           </table>

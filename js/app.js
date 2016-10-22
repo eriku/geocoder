@@ -18,7 +18,7 @@ function ucwords(str,force){
 }
 
 // --- Start Angular Code ---
-var app = angular.module('app', ['ui.directives', 'ngClipboard']);
+var app = angular.module('app', ['ui.directives', 'ngclipboard']);
 
 app.controller('appCtrl', function($scope, $http) {
 
@@ -224,7 +224,3 @@ app.filter('labeler', function () {
       return ucwords(input);
   };
 });
-
-app.config(['ngClipProvider', function(ngClipProvider) {
-  ngClipProvider.setPath('//cdn.jsdelivr.net/zeroclipboard/2.2.0/ZeroClipboard.swf');
-}]);
