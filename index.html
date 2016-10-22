@@ -37,6 +37,10 @@
   <!-- Bootstrap: Theme -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
 
+  <style type="text/css">
+    .ng-cloak { display:none; }
+  </style>
+
   <!-- jQuery -->
   <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
 </head>
@@ -71,7 +75,7 @@
                 <th width="1px">Copy</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody class="ng-cloak">
               <tr ng-repeat="item in addressItems" ng-show="addressItems">
                 <th class="table_label">{{item.types[0] | labeler}}</th>
                 <td class="table_content">{{item.short_name}}</td>
