@@ -143,11 +143,11 @@ app.controller('appCtrl', function($scope, $http) {
     };
 
     $scope.getTextToCopy = function(copy) {
-      return copy;
+        return copy;
     };
 
     $scope.fallback = function(copy) {
-      window.prompt('Press cmd+c to copy the text below.', copy);
+        window.prompt('Press cmd+c to copy the text below.', copy);
     };
 
     $scope.flashClass = function(event) {
@@ -155,6 +155,12 @@ app.controller('appCtrl', function($scope, $http) {
             $(this).removeClass('success').dequeue();
         });
     };
+
+    $scope.onSuccess = function(e) {
+        e.clearSelection();
+        showTooltip(e.trigger);
+    };
+
 });
 
 // - Documentation: https://developers.google.com/maps/documentation/
@@ -224,3 +230,7 @@ app.filter('labeler', function () {
       return ucwords(input);
   };
 });
+
+function showTooltip(elem, msg) {
+    elem.setAttribute('class', 'btn btn-warning btn-xs');
+}
