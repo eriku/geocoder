@@ -29,6 +29,7 @@ app.controller('appCtrl', function($scope, $http) {
     $scope.addressLatLng = [];
     $scope.addressLink;
     $scope.shortUrl;
+    $scope.gPlace;
 
     // Create Short URL using Google URL Shortener API
     $scope.createUrl = function(url) {
@@ -48,17 +49,17 @@ app.controller('appCtrl', function($scope, $http) {
         var latlng = {lat: parseFloat(position.lat()), lng: parseFloat(position.lng())};
         geocoder.geocode({'location': latlng}, function(results, status) {
             if (status === google.maps.GeocoderStatus.OK) {
-                if (results[1]) {
-                    gResults = results[1];
-                    $scope.$apply(function(){
-                        $scope.applyData(results[1]);
-                    });
-                    map.setCenter(latlng);
-                    $scope.createUrl($scope.addressLink);
-                } else if (results[0]) {
+                if (results[0]) {
                     gResults = results[0];
                     $scope.$apply(function(){
                         $scope.applyData(results[0]);
+                    });
+                    map.setCenter(latlng);
+                    $scope.createUrl($scope.addressLink);
+                } else if (results[1]) {
+                    gResults = results[1];
+                    $scope.$apply(function() {
+                        $scope.applyData(results[1]);
                     });
                     map.setCenter(latlng);
                     $scope.createUrl($scope.addressLink);
@@ -66,7 +67,7 @@ app.controller('appCtrl', function($scope, $http) {
                     window.alert('No results found');
                 }
                 if (gResults.length) {
-                  console.log(gResults);
+                  console.log('results: ', gResults);
                 }
             } else {
                 window.alert('Geocoder failed due to: ' + status);
@@ -100,13 +101,13 @@ app.controller('appCtrl', function($scope, $http) {
                             $scope.createUrl($scope.addressLink);
                             var marker = new google.maps.Marker({
                                 position: latlng,
-                                // draggable: true,
+                                draggable: true,
                                 map: map
                             });
                             markers.push(marker);
-                            // google.maps.event.addListener(marker, 'dragend', function() {
-                            //     $scope.geocodePosition(marker.getPosition(), geocoder, map);
-                            // });
+                            google.maps.event.addListener(marker, 'dragend', function() {
+                                $scope.geocodePosition(marker.getPosition(), geocoder, map);
+                            });
                         } else {
                             window.alert('No results found');
                         }
@@ -126,13 +127,13 @@ app.controller('appCtrl', function($scope, $http) {
                         $scope.createUrl($scope.addressLink);
                         var marker = new google.maps.Marker({
                             map: map,
-                            // draggable: true,
+                            draggable: true,
                             position: loc
                         });
                         markers.push(marker);
-                        // google.maps.event.addListener(marker, 'dragend', function() {
-                        //     $scope.geocodePosition(marker.getPosition(), geocoder, map);
-                        // });
+                        google.maps.event.addListener(marker, 'dragend', function() {
+                            $scope.geocodePosition(marker.getPosition(), geocoder, map);
+                        });
                     } else {
                         alert('Geocoder failed due to: ' + status);
                     }
@@ -160,13 +161,13 @@ app.controller('appCtrl', function($scope, $http) {
         e.clearSelection();
         showTooltip(e.trigger);
     };
-
 });
 
 // - Documentation: https://developers.google.com/maps/documentation/
 app.directive('appMap', function () {
     var markers = [];
     function clearOverlays() {
+        $('.btn.btn-warning.btn-xs').removeClass('btn-warning').addClass('btn-primary');
         for (var i = 0; i < markers.length; i++ ) {
             markers[i].setMap(null);
         }
@@ -193,6 +194,31 @@ app.directive('appMap', function () {
         }
     };
 });
+
+// app.directive('googlePlaceAutocomplete', function() {
+//     return {
+//         require: 'ngModel',
+//         link: function(scope, element, attrs, model, safeApply) {
+//             var options = {
+//                 types: []
+//             };
+//             scope.gPlace = new google.maps.places.Autocomplete(element[0], options);
+//             google.maps.event.addListener(scope.gPlace, 'place_changed', function() {
+//                 var place = scope.gPlace.getPlace();
+//                 var btn = document.getElementById('formBtn');
+//                 setTimeout(function(){
+//                     console.log(place);
+//                     $('#formBtn').trigger('click');
+//                 }, 1000);
+                // scope.$apply(function() {
+                //     console.log(place);
+                    // btn.click();
+                    // document.getElementById('searchForm').submit();
+                // });
+//             });
+//         }
+//     };
+// });
 
 app.filter('labeler', function () {
   return function (input) {
