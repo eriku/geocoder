@@ -119,9 +119,9 @@ app.controller('appCtrl', function($scope, $http) {
             } else {
                 this.geocoder.geocode({'address': $scope.address}, function(results, status) {
                     if (status === google.maps.GeocoderStatus.OK) {
-//                         $scope.$apply(function(){
-//                             $scope.applyData(results[0]);
-//                         });
+                        $scope.$apply(function(){
+                            $scope.applyData(results[0]);
+                        });
                         var loc = results[0].geometry.location;
                         map.setCenter(loc);
                         $scope.createUrl($scope.addressLink);
