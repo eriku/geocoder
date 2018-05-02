@@ -210,11 +210,11 @@ app.directive('appMap', function () {
 //                     console.log(place);
 //                     $('#formBtn').trigger('click');
 //                 }, 1000);
-                // scope.$apply(function() {
-                //     console.log(place);
-                    // btn.click();
-                    // document.getElementById('searchForm').submit();
-                // });
+//                 scope.$apply(function() {
+//                     console.log(place);
+//                     btn.click();
+//                     document.getElementById('searchForm').submit();
+//                 });
 //             });
 //         }
 //     };
